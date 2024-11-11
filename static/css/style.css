@@ -1,0 +1,57 @@
+/* static/css/style.css */
+
+/* Fontes e Cores */
+body {
+    font-family: 'Helvetica', sans-serif;
+    color: #333333;
+}
+
+
+
+header h1 {
+    color: #1a202c;
+}
+
+a {
+    color: #3182ce;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: #2b6cb0;
+}
+
+/* Estilo do container principal */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Ajuste de espaços para o blog */
+.main-content {
+    padding: 20px;
+}
+
+.card {
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Botões */
+/*button {
+    background-color: #3182ce;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #2b6cb0;
+}
