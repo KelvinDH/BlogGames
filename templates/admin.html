@@ -1,0 +1,92 @@
+<!-- templates/admin.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração - Blog de Motivação</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <script src="https://unpkg.com/tailwindcss-jit-cdn"></script>
+    <!-- Navbar -->
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between">
+            <h1 class="text-2xl font-bold">Painel de Administração</h1>
+            <div class="flex space-x-4">
+                <a href="{{ url_for('admin') }}" style="padding: 12px;" class="text-white-700 hover:bg-green-400">Dashboard</a>
+                <a href="{{ url_for('admin_posts') }}" style="padding: 12px;" class="text-white-700 hover:bg-green-400">Posts</a>
+                <a href="{{ url_for('metrics') }}" style="padding: 12px;" class="text-white-700 hover:bg-green-400">Métricas</a>
+                <a href="{{ url_for('logout') }}" style="padding: 12px;" class="text-white-700 hover:bg-green-400">Sair</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="container mx-auto py-10">
+        <h2 class="text-3xl font-semibold mb-6">Bem-vindo ao Painel de Administração</h2>
+        <p class="text-gray-700 mb-8">Gerencie seu blog, acompanhe métricas e visualize postagens a partir deste painel.</p>
+        
+        <!-- Links para as Funções do Painel -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- Card de Métricas -->
+            <div class="bg-white p-6 rounded-lg shadow-md flex items-center">
+                <i class="fas fa-chart-line text-blue-500 text-4xl mr-4"></i>
+                <div>
+                    <h3 class="text-xl font-semibold">Métricas do Blog</h3>
+                    <p class="text-gray-600">Visualizar as visitas total e de cada post.</p>
+                    <br><a href="{{ url_for('metrics') }}" class="relative px-5 py-3 overflow-hidden font-medium text-blue-500 bg-gray-100 border border-blue-100 rounded-lg shadow-inner group">
+                        <span class="absolute top-0 left-0 w-0 h-0 transition-all duration-200 border-t-2 border-blue-600 group-hover:w-full ease"></span>
+                        <span class="absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 border-blue-600 group-hover:w-full ease"></span>
+                        <span class="absolute top-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-blue-600 group-hover:h-full ease"></span>
+                        <span class="absolute bottom-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-blue-600 group-hover:h-full ease"></span>
+                        <span class="absolute inset-0 w-full h-full duration-300 delay-300 bg-blue-900 opacity-0 group-hover:opacity-100"></span>
+                        <span class="relative transition-colors duration-300 delay-200 group-hover:text-white ease">Visualizar</span>
+                    </br></a>
+                    <!--<a href="{{ url_for('metrics') }}" class="text-blue-500 hover:underline mt-2 inline-block">Acessar Métricas</a>-->
+                </div>
+            </div>
+            
+            <!-- Card de Gerenciamento de Posts -->
+            <div class="bg-white p-6 rounded-lg shadow-md flex items-center">
+                <i class="fas fa-edit text-green-500 text-4xl mr-4"></i>
+                <div>
+                    <h3 class="text-xl font-semibold">Gerenciar Posts</h3>
+                    <p class="text-gray-600">Edite, exclua e visualize todos os posts.</p>
+                    <br><a href="{{ url_for('admin_posts') }}" class="relative px-5 py-3 overflow-hidden font-medium text-green-500 bg-gray-100 border border-green-100 rounded-lg shadow-inner group">
+                        <span class="absolute top-0 left-0 w-0 h-0 transition-all duration-200 border-t-2 border-green-600 group-hover:w-full ease"></span>
+                        <span class="absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 border-green-600 group-hover:w-full ease"></span>
+                        <span class="absolute top-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-green-600 group-hover:h-full ease"></span>
+                        <span class="absolute bottom-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-green-600 group-hover:h-full ease"></span>
+                        <span class="absolute inset-0 w-full h-full duration-300 delay-300 bg-green-900 opacity-0 group-hover:opacity-100"></span>
+                        <span class="relative transition-colors duration-300 delay-200 group-hover:text-white ease">Gerenciar</span>
+                    </br></a>
+                    <!--<a href="{{ url_for('admin_posts') }}" class="text-green-500 hover:underline mt-2 inline-block">Gerenciar Posts</a>-->
+                </div>
+            </div>
+            
+            <!-- Card para Criar Novo Post -->
+            <div class="bg-white p-6 rounded-lg shadow-md flex items-center">
+                <i class="fas fa-plus-circle text-purple-500 text-4xl mr-4"></i>
+                <div>
+                    <h3 class="text-xl font-semibold">Criar Novo Post</h3>
+                    <p class="text-gray-600">Publique um novo conteúdo para o blog.</p>
+                    <br><a href="{{ url_for('create_post') }}" class="relative px-5 py-3 overflow-hidden font-medium text-purple-600 bg-gray-100 border border-purple-100 rounded-lg shadow-inner group">
+                        <span class="absolute top-0 left-0 w-0 h-0 transition-all duration-200 border-t-2 border-purple-600 group-hover:w-full ease"></span>
+                        <span class="absolute bottom-0 right-0 w-0 h-0 transition-all duration-200 border-b-2 border-purple-600 group-hover:w-full ease"></span>
+                        <span class="absolute top-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-purple-600 group-hover:h-full ease"></span>
+                        <span class="absolute bottom-0 left-0 w-full h-0 transition-all duration-300 delay-200 bg-purple-600 group-hover:h-full ease"></span>
+                        <span class="absolute inset-0 w-full h-full duration-300 delay-300 bg-purple-900 opacity-0 group-hover:opacity-100"></span>
+                        <span class="relative transition-colors duration-300 delay-200 group-hover:text-white ease">Novo Post</span>
+                    </br></a>
+                    <!--<a href="{{ url_for('create_post') }}" class="text-purple-500 hover:underline mt-2 inline-block">Novo Post</a>-->
+                </div>
+            </div>
+            
+        </div>
+    </main>
+</body>
+</html>

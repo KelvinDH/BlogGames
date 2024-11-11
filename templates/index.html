@@ -1,0 +1,210 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog de Motivação</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+
+    <!-- CSS personalizado -->
+    <!--<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">-->
+    
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <style>
+        #back-to-top {
+            display: none; /* Esconde inicialmente */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100; /* Para ficar acima de outros elementos */
+        }
+        #back-to-top.show {
+            display: block; /* Mostra quando a classe 'show' é adicionada */
+        }
+    </style>
+    
+    
+    <!-- Cabeçalho com Navegação -->
+    <header class="bg-gray-600 text-white py-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-white-500">Blog de Motivação</h1>
+        <!-- Campo de Busca no Navbar -->
+            <form action="{{ url_for('search') }}" method="GET" class="flex items-center">
+                <div class="relative w-full max-w-xs">
+                    <!-- Campo de Busca -->
+                    <input type="text" name="query" placeholder="Pesquisar" 
+                        class="text-gray-600 pl-4 pr-10 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
+                        style="min-width: 250px;">
+
+                    <!-- Ícone de Lupa como Botão de Busca -->
+                    <button type="submit" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-blue-500">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </form>
+
+            <nav class="space-x-4">
+                <a href="{{ url_for('index') }}" class="relative px-6 py-3 font-bold text-black group">
+                    <span class="absolute inset-0 w-full h-full transition duration-300 ease-out transform -translate-x-2 -translate-y-2 bg-white group-hover:translate-x-0 group-hover:translate-y-0"></span>
+                    <span class="absolute inset-0 w-full h-full border-4 border-black"></span>
+                    <span class="relative">Home</span>
+                </a>
+                <!--<a href="{{ url_for('index') }}" style="padding: 12px;" class="text-white-700 hover:bg-blue-600">Home</a>-->
+                <a href="{{ url_for('about') }}" class="relative px-6 py-3 font-bold text-black group">
+                    <span class="absolute inset-0 w-full h-full transition duration-300 ease-out transform -translate-x-2 -translate-y-2 bg-white group-hover:translate-x-0 group-hover:translate-y-0"></span>
+                    <span class="absolute inset-0 w-full h-full border-4 border-black"></span>
+                    <span class="relative">Sobre</span>
+                </a>
+                <a href="{{ url_for('contact') }}" class="relative px-6 py-3 font-bold text-black group">
+                    <span class="absolute inset-0 w-full h-full transition duration-300 ease-out transform -translate-x-2 -translate-y-2 bg-white group-hover:translate-x-0 group-hover:translate-y-0"></span>
+                    <span class="absolute inset-0 w-full h-full border-4 border-black"></span>
+                    <span class="relative">Contato</span>
+                </a>
+                <!--<a href="{{ url_for('about') }}" style="padding: 12px;" class="text-white-700 hover:bg-blue-600">Sobre</a>-->
+                <!--<a href="{{ url_for('contact') }}" style="padding: 12px;" class="text-white-700 hover:bg-blue-600">Contato</a>-->
+            </nav>
+
+       
+        </div>
+    </header>
+    <script src="https://unpkg.com/tailwindcss-jit-cdn"></script>
+    <!-- Conteúdo Principal e Barra Lateral -->
+    <main class="container mx-auto flex flex-col lg:flex-row gap-8 py-10">
+        <!-- Seção Principal de Posts -->
+        <section class="lg:w-2/3">
+            <h2 class="text-2xl font-semibold mb-6">Postagens Recentes:</h2>
+            
+            <div id="post-list" class="space-y-6">
+                {% for post in posts %}
+                <article class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 style="width: 80px; white-space: nowrap;" class="text-xl font-bold text-blue-500 hover:text-green-700">
+                        <a href="{{ url_for('post_detail', post_id=post.id) }}">{{ post.title }}</a>
+                    </h3>
+                    <p class="text-sm text-gray-500 mb-2"><i class="bi bi-calendar2-fill" > {{ post.created_at.strftime('%d/%m/%Y') }}</i></p>
+
+                     <!-- Extrai e exibe a primeira imagem do conteúdo -->
+                    {% set first_image = post.content|safe|regex_search('<img .*?src="([^"]+)"', 1) %}
+                    {% if first_image %}
+                    <img src="{{ first_image }}" class="w-full h-48 object-cover rounded-lg mb-4">
+                    {% endif %}
+
+                    <!--<img src="{{ url_for('static', filename=author_image) }}" href="{{ url_for('post_detail', post_id=post.id) }}" class="w-16 h-16 rounded-full">-->
+                    <p class="text-gray-700">{{ post.content[:200] | striptags | safe }}...</p>
+                    <br><a href="{{ url_for('post_detail', post_id=post.id) }}" class="relative inline-block px-4 py-2 font-medium group">
+                        <span class="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                        <span class="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                        <span class="relative text-black group-hover:text-white">Leia mais</span>
+                    </br></a>
+                    <!--<a href="{{ url_for('post_detail', post_id=post.id) }}" class="text-blue-500 hover:text-green-700">Leia mais</a>-->
+                </article>
+                {% endfor %}
+            </div>
+            <i id="back-to-top" style="font-size: 30px; margin-bottom: 60px; cursor: pointer; color: blue;" class="bi bi-arrow-up-circle-fill"></i>
+            <!-- Botão "Ver Mais" para carregar mais postagens -->
+            {% if has_more_posts %}
+            <div style="cursor: pointer;"class="flex justify-center mt-6">
+                <a id="load-more" class="relative inline-block text-lg group">
+                    <span class="relative z-10 block px-5 py-3 overflow-hidden font-medium leading-tight text-gray-800 transition-colors duration-300 ease-out border-2 border-gray-900 rounded-lg group-hover:text-white">
+                        <span class="absolute inset-0 w-full h-full px-5 py-3 rounded-lg bg-gray-50"></span>
+                        <span class="absolute left-0 w-48 h-48 -ml-2 transition-all duration-300 origin-top-right -rotate-90 -translate-x-full translate-y-12 bg-gray-900 group-hover:-rotate-180 ease"></span>
+                        <span class="relative">Ver mais</span>
+                    </span>
+                    <span class="absolute bottom-0 right-0 w-full h-12 -mb-1 -mr-1 transition-all duration-200 ease-linear bg-gray-900 rounded-lg group-hover:mb-0 group-hover:mr-0" data-rounded="rounded-lg"></span>
+                </a>
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Barra Lateral -->
+        <aside class="h" style="padding: 12px 12px; margin-top: 56px; background-color: rgb(236, 234, 234); height: 400px; width: 400px; border-radius: 10px;">
+            <h2 class="text-xl font-semibold mb-4">Últimas Postagens</h2>
+            <ul class="space-y-4">
+                {% for recent_post in recent_posts %}
+                <li>
+                    <a href="{{ url_for('post_detail', post_id=recent_post.id) }}" class="text-blue-600 hover:text-green-600">{{ recent_post.title }}</a>
+                    <p class="text-sm text-gray-400"><i class="bi bi-calendar2-fill"> {{ recent_post.created_at.strftime('%d/%m/%Y') }}</i></p>
+                </li>
+                {% endfor %}
+            </ul>
+        </aside>
+     <!-- Botão Voltar ao Topo -->
+    
+        
+        
+    </main>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Rodapé -->
+    <footer class="bg-gray-800 text-white py-6" style="padding: 8px 9px; ">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+            <p class="text-sm">&copy; 2024 Blog de Motivação. Todos os direitos reservados.</p>
+            <nav class="space-x-4" style="align-items: center;">
+                <a href="{{ url_for('index') }}" style="font-size: 30px;" class="bi bi-instagram hover:text-orange-600"></a>
+                <a href="{{ url_for('about') }}" style="font-size: 30px;" class="bi bi-facebook hover:text-blue-400"></a>
+                <a href="{{ url_for('contact') }}" class="bi bi-youtube hover:text-red-400" style="font-size: 30px; padding: 2px 2px;"></a>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- JavaScript para Carregar Mais Postagens -->
+    <script>
+        let nextPage = "{{ next_page if has_more_posts else 'null' }}";  // Próxima página a ser carregada
+    
+        // Função para carregar mais postagens
+        document.getElementById('load-more')?.addEventListener('click', async () => {
+            if (!nextPage || nextPage === 'null') return;  // Se não houver próxima página, sai da função
+            
+            // Faz a requisição para carregar mais postagens
+            const response = await fetch(`/?page=${nextPage}`);
+            const data = await response.text();
+            
+            // Extrai o conteúdo das novas postagens e adiciona à lista de postagens
+            const parser = new DOMParser();
+            const newDocument = parser.parseFromString(data, 'text/html');
+            const newPosts = newDocument.querySelectorAll('#post-list > article');
+            const postList = document.getElementById('post-list');
+            newPosts.forEach(post => postList.appendChild(post));
+    
+            // Atualiza a variável `nextPage` para a próxima página
+            nextPage = parseInt(nextPage) + 1;
+    
+            // Verifica se o botão "Ver Mais" deve ser removido
+            if (!newDocument.querySelector('#load-more')) {
+                document.getElementById('load-more').style.display = 'none';
+            }
+        });
+    
+        window.onscroll = function() {
+        let button = document.getElementById("back-to-top");
+        let footer = document.getElementById("footer");
+
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            button.classList.add("show");
+        } else {
+            button.classList.remove("show");
+        }
+
+        // Limite do botão
+        let footerRect = footer.getBoundingClientRect();
+        let windowHeight = window.innerHeight;
+
+        if (footerRect.top <= windowHeight) {
+            let offset = 20;
+            button.style.bottom = (windowHeight - footerRect.top + 20) + 'px';  // Ajusta o botão para ficar acima do footer
+        } else {
+            button.style.bottom = '20px';  // Posição padrão
+        }
+    };
+
+    document.getElementById("back-to-top").addEventListener("click", function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    </script>
+    
+
+</body>
+</html>
